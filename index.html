@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChromaDash</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="topbar">
+    <span class="logo">🎨 ChromaDash</span>
+    <div class="topbar-controls">
+
+      <select id="modeSelect">
+        <option value="random">عشوائي</option>
+        <option value="analogous">Analogous</option>
+        <option value="monochromatic">Monochromatic</option>
+        <option value="triadic">Triadic</option>
+      </select>
+
+      <select id="cbSelect" title="محاكي عمى الألوان">
+        <option value="none">👁 عادي</option>
+        <option value="protanopia">Protanopia</option>
+        <option value="deuteranopia">Deuteranopia</option>
+        <option value="tritanopia">Tritanopia</option>
+        <option value="achromatopsia">Achromatopsia</option>
+      </select>
+
+      <button id="gradientToggle" title="وضع التدرج">〰 Gradient</button>
+
+      <label class="topbar-btn" title="استخراج ألوان من صورة">
+        🖼 صورة
+        <input type="file" id="imageInput" accept="image/*" style="display:none" />
+      </label>
+
+      <button id="exportBtn">⬇ تصدير</button>
+      <button id="favoritesBtn">❤ المفضلة</button>
+    </div>
+  </div>
+
+  <div class="panel" id="exportPanel">
+    <div class="panel-header">
+      <span>تصدير الباليت</span>
+      <button class="close-panel" onclick="closePanel('exportPanel')">✕</button>
+    </div>
+    <div class="panel-body">
+      <button onclick="exportCSS()">نسخ كـ CSS Variables</button>
+      <button onclick="exportGradientCSS()">نسخ كـ CSS Gradient</button>
+      <button onclick="exportJSON()">تحميل JSON</button>
+      <button onclick="exportPNG()">تحميل PNG</button>
+    </div>
+    <pre id="exportPreview"></pre>
+  </div>
+
+  <div class="panel" id="favoritesPanel">
+    <div class="panel-header">
+      <span>❤ المفضلة</span>
+      <button class="close-panel" onclick="closePanel('favoritesPanel')">✕</button>
+    </div>
+    <div id="favoritesList" class="favorites-list"></div>
+    <p id="favEmpty" class="fav-empty">لا يوجد باليتات محفوظة بعد</p>
+  </div>
+
+  <div class="container" id="container">
+    <div class="color-col" draggable="true" onclick="copyColor(this)">
+      <div class="drag-handle">⠿</div>
+      <div class="lock-btn" onclick="toggleLock(event, this)">🔓</div>
+      <h2 class="color-code">#FFFFFF</h2>
+      <span class="copied-msg">Copied!</span>
+    </div>
+    <div class="color-col" draggable="true" onclick="copyColor(this)">
+      <div class="drag-handle">⠿</div>
+      <div class="lock-btn" onclick="toggleLock(event, this)">🔓</div>
+      <h2 class="color-code">#FFFFFF</h2>
+      <span class="copied-msg">Copied!</span>
+    </div>
+    <div class="color-col" draggable="true" onclick="copyColor(this)">
+      <div class="drag-handle">⠿</div>
+      <div class="lock-btn" onclick="toggleLock(event, this)">🔓</div>
+      <h2 class="color-code">#FFFFFF</h2>
+      <span class="copied-msg">Copied!</span>
+    </div>
+    <div class="color-col" draggable="true" onclick="copyColor(this)">
+      <div class="drag-handle">⠿</div>
+      <div class="lock-btn" onclick="toggleLock(event, this)">🔓</div>
+      <h2 class="color-code">#FFFFFF</h2>
+      <span class="copied-msg">Copied!</span>
+    </div>
+    <div class="color-col" draggable="true" onclick="copyColor(this)">
+      <div class="drag-handle">⠿</div>
+      <div class="lock-btn" onclick="toggleLock(event, this)">🔓</div>
+      <h2 class="color-code">#FFFFFF</h2>
+      <span class="copied-msg">Copied!</span>
+    </div>
+  </div>
+
+  <div class="gradient-bar hidden" id="gradientBar">
+    <div class="gradient-preview" id="gradientPreview"></div>
+    <button class="gradient-copy-btn" id="gradientCopyBtn">نسخ CSS</button>
+    <span class="gradient-copied" id="gradientCopied">Copied!</span>
+  </div>
+
+  <div class="mockup-section" id="mockupSection">
+    <div class="mockup-navbar" id="mockupNavbar">
+      <span class="mockup-logo" id="mockupLogo">MyBrand</span>
+      <div class="mockup-nav-links">
+        <span id="mockupLink1">الرئيسية</span>
+        <span id="mockupLink2">المنتجات</span>
+        <span id="mockupLink3">تواصل</span>
+      </div>
+    </div>
+    <div class="mockup-body" id="mockupBody">
+      <div class="mockup-card" id="mockupCard">
+        <h3 class="mockup-card-title" id="mockupCardTitle">عنوان البطاقة</h3>
+        <p class="mockup-card-text" id="mockupCardText">هذا نص تجريبي يوضح كيف تبدو الألوان على محتوى حقيقي داخل بطاقة.</p>
+        <button class="mockup-btn" id="mockupBtn">اضغط هنا</button>
+      </div>
+      <div class="mockup-card" id="mockupCard2">
+        <h3 class="mockup-card-title" id="mockupCardTitle2">بطاقة ثانية</h3>
+        <p class="mockup-card-text" id="mockupCardText2">محتوى إضافي لمعاينة التناسق بين الألوان المختلفة في التصميم.</p>
+        <button class="mockup-btn mockup-btn-outline" id="mockupBtnOutline">تفاصيل</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="save-btn" id="saveBtn" title="حفظ في المفضلة">♡</button>
+  <div class="history-strip" id="historyStrip"></div>
+  <div class="hint">اضغط <kbd>Space</kbd> لتغيير الألوان</div>
+
+  <canvas id="imgCanvas" style="display:none"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
